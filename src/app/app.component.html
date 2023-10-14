@@ -1,1 +1,12 @@
-{{stats | json}}
+<pre>{{ $stats | async | json }}</pre>
+
+<pre>{{ $loop | async | json }}</pre>
+
+<pre>{{ $power | async | json }}</pre>
+
+<button (click)="moodlight()">Moodlight</button>
+<button (click)="moodlightOff()">MoodlightOff</button>
+
+<button (click)="on()">On</button>
+<button (click)="off()">Off</button>
+<button (click)="sleep()">sleep</button>

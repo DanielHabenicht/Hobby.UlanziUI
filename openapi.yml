@@ -3,14 +3,489 @@ info:
   title: Ulanzi AWTRIX API
   version: '1.0'
 servers:
-  - url: http://192.168.178.144/api
+  - url: http://192.168.178.144
 paths:
-  /stats:
+  /api/stats:
     get:
       responses:
         '200':
           description: OK
-  /screen:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bat:
+                    type: number
+                  bat_raw:
+                    type: number
+                  type:
+                    type: number
+                  lux:
+                    type: number
+                  ldr_raw:
+                    type: number
+                  ram:
+                    type: number
+                  bri:
+                    type: number
+                  temp:
+                    type: number
+                  hum:
+                    type: number
+                  uptime:
+                    type: number
+                  wifi_signal:
+                    type: number
+                  messages:
+                    type: number
+                  version:
+                    type: string
+                  indicator1:
+                    type: boolean
+                  indicator2:
+                    type: boolean
+                  indicator3:
+                    type: boolean
+                  app:
+                    type: string
+                  uid:
+                    type: string
+                required:
+                - bat
+                - bat_raw
+                - type
+                - lux
+                - ldr_raw
+                - ram
+                - bri
+                - temp
+                - hum
+                - uptime
+                - wifi_signal
+                - messages
+                - version
+                - indicator1
+                - indicator2
+                - indicator3
+                - app
+                - uid
+
+  /api/effects:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /api/transitions:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /api/screen:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: number
+  /api/loop:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  oneOf:
+                    - type: string
+
+  /api/moodlight:
+    post:
+      summary: Sets the moodlight.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: string
+                - type: object
+                  properties:
+                    brightness:
+                      type: number
+                      minimum: 0
+                    kelvin:
+                      type: number
+                      minimum: 0
+                - type: object
+                  properties:
+                    brightness:
+                      type: number
+                      minimum: 0
+                    color:
+                      oneOf:
+                      - type: string
+                      - type: array
+                        items:
+                          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+
+
+  /api/power:
+    get:
+        responses:
+          '200':
+            description: OK
+    post:
+      summary: Turns the screen on or off.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                power:
+                  type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /api/sleep:
+    post:
+      summary: Puts the board in deep sleep mode.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sleep:
+                  type: number
+                  description: Number of seconds to be in deeps sleep.
+      responses:
+        '200':
+          description: OK
+
+  /api/custom:
+    description: Allows to edit and app screens.
+    post:
+      parameters:
+        - name: name
+          in: path
+          required: true
+          description: Name of the app to edit.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sleep:
+                  type: number
+                  description: Number of seconds to be in deeps sleep.
+      responses:
+        '200':
+          description: OK
+
+  /api/reboot:
+    description: Allows to reboot it.
+    post:
+      responses:
+        '200':
+          description: OK
+
+  /api/settings:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                MATP:
+                  type: boolean
+                  description: 'MATrix Power: Whether the screen currently is on or off.'
+                ABRI:
+                  type: boolean
+                  description: 'Automatic BRIghtness: Whether the screen auto brightness function is currently on or off.'
+                BRI:
+                  type: number
+                  description: 'BRIghtness: Current brightness settings.'
+                ATRANS:
+                  type: boolean
+                  description: 'Auto TRANSition: Whether the clock changes screen automatically.'
+                TCOL:
+                  type: number
+                  description: 'Text COLor'
+                TEFF:
+                  type: number
+                  description: 'Transition EFFect'
+                TSPEED:
+                  type: number
+                  description: 'Transition SPEED: Speed take for a transition from one app to another.'
+                ATIME:
+                  type: number
+                  description: 'App TIME: Time until automatic change to the next app.'
+                TMODE:
+                  type: number
+                  description: 'Time MODE: Display Style of the time.'
+                CHCOL:
+                  type: number
+                  description: 'Calendar Header COLor'
+                CTCOL:
+                  type: number
+                  description: 'Calendar Text COLor'
+                CBCOL:
+                  type: number
+                  description: 'Calendar Body COLor'
+                TFORMAT:
+                  type: string
+                  description: 'Time FORMAT for the Time App'
+                DFORMAT:
+                  type: string
+                  description: 'Date FORMAT for the Time App'
+                SOM:
+                  type: boolean
+                  description: 'Start Of the week Monday: Whether the week should start with monday.'
+                CEL:
+                  type: boolean
+                  description: 'CELsius or Fahrenheit?'
+                BLOCKN:
+                  type: boolean
+                  description: 'BLOCK Navigation: Block physical button actions.'
+                MAT:
+                  type: number
+                  description: MAT'
+                SOUND:
+                  type: boolean
+                GAMMA:
+                  type: number
+                UPPERCASE:
+                  type: boolean
+                  description: "Display text in uppercase."
+                CCORRECTION:
+                  type: string
+                CTEMP:
+                  type: string
+                WD:
+                  type: boolean
+                WDCA:
+                  type: number
+                WDCI:
+                  type: number
+                TIME_COL:
+                  type: number
+                DATE_COL:
+                  type: number
+                HUM_COL:
+                  type: number
+                TEMP_COL:
+                  type: number
+                BAT_COL:
+                  type: number
+                SSPEED:
+                  type: number
+                  description: 'Scroll SPEED: Percentage modifier of the original scroll speed.'
+                TIM:
+                  type: boolean
+                  description: 'TIMe: Whether the Time App is activated.'
+                DAT:
+                  type: boolean
+                  description: 'DATe: Whether the Date App is activated.'
+                HUM:
+                  type: boolean
+                  description: 'HUMidity: Whether the Humidity App is activated.'
+                TEMP:
+                  type: boolean
+                  description: 'TEMPerature: Whether the Temperature App is activated.'
+                BAT:
+                  type: boolean
+                  description: 'BATtery: Whether the Battery App is activated.'
+      responses:
+        '200':
+          description: OK
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  MATP:
+                    type: boolean
+                    description: 'MATrix Power: Whether the screen currently is on or off.'
+                  ABRI:
+                    type: boolean
+                    description: 'Automatic BRIghtness: Whether the screen auto brightness function is currently on or off.'
+                  BRI:
+                    type: number
+                    description: 'BRIghtness: Current brightness settings.'
+                  ATRANS:
+                    type: boolean
+                    description: 'Auto TRANSition: Whether the clock changes screen automatically.'
+                  TCOL:
+                    type: number
+                    description: 'Text COLor'
+                  TEFF:
+                    type: number
+                    description: 'Transition EFFect'
+                  TSPEED:
+                    type: number
+                    description: 'Transition SPEED: Speed take for a transition from one app to another.'
+                  ATIME:
+                    type: number
+                    description: 'App TIME: Time until automatic change to the next app.'
+                  TMODE:
+                    type: number
+                    description: 'Time MODE: Display Style of the time.'
+                  CHCOL:
+                    type: number
+                    description: 'Calendar Header COLor'
+                  CTCOL:
+                    type: number
+                    description: 'Calendar Text COLor'
+                  CBCOL:
+                    type: number
+                    description: 'Calendar Body COLor'
+                  TFORMAT:
+                    type: string
+                    description: 'Time FORMAT for the Time App'
+                  DFORMAT:
+                    type: string
+                    description: 'Date FORMAT for the Time App'
+                  SOM:
+                    type: boolean
+                    description: 'Start Of the week Monday: Whether the week should start with monday (true) or sunday (false).'
+                  CEL:
+                    type: boolean
+                    description: 'CELsius or Fahrenheit?'
+                  BLOCKN:
+                    type: boolean
+                    description: 'BLOCK Navigation: Block physical button actions.'
+                  MAT:
+                    type: number
+                    description: MAT'
+                  SOUND:
+                    type: boolean
+                  GAMMA:
+                    type: number
+                  UPPERCASE:
+                    type: boolean
+                    description: "Display text in uppercase."
+                  CCORRECTION:
+                    type: string
+                  CTEMP:
+                    type: string
+                  WD:
+                    type: boolean
+                  WDCA:
+                    type: number
+                  WDCI:
+                    type: number
+                  TIME_COL:
+                    type: number
+                  DATE_COL:
+                    type: number
+                  HUM_COL:
+                    type: number
+                  TEMP_COL:
+                    type: number
+                  BAT_COL:
+                    type: number
+                  SSPEED:
+                    type: number
+                    description: 'Scroll SPEED: Percentage modifier of the original scroll speed.'
+                  TIM:
+                    type: boolean
+                    description: 'TIMe: Whether the Time App is activated.'
+                  DAT:
+                    type: boolean
+                    description: 'DATe: Whether the Date App is activated.'
+                  HUM:
+                    type: boolean
+                    description: 'HUMidity: Whether the Humidity App is activated.'
+                  TEMP:
+                    type: boolean
+                    description: 'TEMPerature: Whether the Temperature App is activated.'
+                  BAT:
+                    type: boolean
+                    description: 'BATtery: Whether the Battery App is activated.'
+                required:
+                - MATP
+                - ABRI
+                - BRI
+                - ATRANS
+                - TCOL
+                - TEFF
+                - TSPEED
+                - ATIME
+                - TMODE
+                - CHCOL
+                - CTCOL
+                - CBCOL
+                - TFORMAT
+                - DFORMAT
+                - SOM
+                - CEL
+                - BLOCKN
+                - MAT
+                - SOUND
+                - GAMMA
+                - UPPERCASE
+                - CCORRECTION
+                - CTEMP
+                - WD
+                - WDCA
+                - WDCI
+                - TIME_COL
+                - DATE_COL
+                - HUM_COL
+                - TEMP_COL
+                - BAT_COL
+                - SSPEED
+                - TIM
+                - DAT
+                - HUM
+                - TEMP
+                - BAT
+
+  /DoNotTouch.json:
     get:
       responses:
         '200':
