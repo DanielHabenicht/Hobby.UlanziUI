@@ -3,9 +3,14 @@ info:
   title: Ulanzi AWTRIX API
   version: '1.0'
 servers:
-  - url: https://api.server.test/v1
+  - url: http://192.168.178.144/api
 paths:
-  /test:
+  /stats:
+    get:
+      responses:
+        '200':
+          description: OK
+  /screen:
     get:
       responses:
         '200':
