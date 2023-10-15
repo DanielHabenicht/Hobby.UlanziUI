@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
-import { DefaultService } from 'src/api';
+import {
+  ApiSettingsGet200Response,
+  ApiStatsGet200Response,
+  DefaultService,
+} from 'src/api';
 
 @Component({
   selector: 'app-root',
@@ -7,18 +11,100 @@ import { DefaultService } from 'src/api';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  public $stats;
+  public stats: ApiStatsGet200Response = {
+    app: '',
+    bat: 0,
+    bat_raw: 0,
+    bri: 0,
+    hum: 0,
+    indicator1: false,
+    indicator2: false,
+    indicator3: false,
+    ldr_raw: 0,
+    lux: 0,
+    messages: 0,
+    ram: 0,
+    temp: 0,
+    type: 0,
+    uptime: 0,
+    uid: '',
+    version: '',
+    wifi_signal: 0,
+  };
   public apps: string[] = [];
 
-  public $power;
+  public settings: ApiSettingsGet200Response = {
+    MATP: true,
+    ABRI: true,
+    BRI: 25,
+    ATRANS: true,
+    TCOL: 16777215,
+    TEFF: 2,
+    TSPEED: 400,
+    ATIME: 7,
+    TMODE: 1,
+    CHCOL: 16711680,
+    CTCOL: 0,
+    CBCOL: 16777215,
+    TFORMAT: '%H %M',
+    DFORMAT: '%d.%m.%y',
+    SOM: true,
+    CEL: true,
+    BLOCKN: false,
+    MAT: 0,
+    SOUND: true,
+    GAMMA: 1.899999976,
+    UPPERCASE: true,
+    CCORRECTION: '#000000',
+    CTEMP: '#000000',
+    WD: true,
+    WDCA: 16777215,
+    WDCI: 6710886,
+    TIME_COL: 0,
+    DATE_COL: 0,
+    HUM_COL: 0,
+    TEMP_COL: 0,
+    BAT_COL: 0,
+    SSPEED: 100,
+    TIM: true,
+    DAT: true,
+    HUM: false,
+    TEMP: false,
+    BAT: false,
+  };
 
   constructor(private apiService: DefaultService) {
-    this.$stats = this.apiService.apiStatsGet();
+    this.updateSettings();
+    this.updateStats();
+    setInterval(() => {
+      this.updateStats();
+    }, 2000);
+    this.updateApps();
+    // this.set();
+  }
+
+  private updateSettings() {
+    this.apiService.apiSettingsGet().subscribe((settings) => {
+      this.settings = settings;
+    });
+  }
+
+  private updateStats() {
+    this.apiService.apiStatsGet().subscribe((stats) => {
+      this.stats = stats;
+    });
+  }
+
+  private updateApps() {
     this.apiService.apiLoopGet().subscribe((loop) => {
       this.apps = Object.keys(loop);
     });
-    this.$power = this.apiService.apiSettingsGet();
-    this.set();
+  }
+
+  public refresh() {
+    this.updateStats();
+    this.updateApps();
+    this.updateSettings();
   }
 
   public moodlight() {
@@ -58,7 +144,11 @@ export class AppComponent {
   }
 
   public delete(app: string) {
-    this.apiService.apiCustomPost(app, '').subscribe();
+    this.apiService.apiCustomPost(app, '').subscribe({
+      complete: () => {
+        this.updateApps();
+      },
+    });
   }
 
   public display(app: string) {
@@ -75,5 +165,52 @@ export class AppComponent {
 
   public reboot() {
     this.apiService.apiRebootPost().subscribe();
+  }
+
+  public brightness(brightness: Event) {
+    // debugger;
+    if (!brightness.target) return;
+    this.apiService
+      .apiSettingsPost({
+        BRI: (brightness.target as HTMLInputElement).valueAsNumber,
+        ABRI: false,
+      })
+      .subscribe();
+    this.updateSettings();
+  }
+
+  public autoBrightness() {
+    this.apiService
+      .apiSettingsPost({
+        ABRI: true,
+      })
+      .subscribe();
+    this.updateSettings();
+  }
+
+  public displayIndicator(number: number) {
+    switch (number) {
+      case 1:
+        this.apiService
+          .apiIndicator1Post({
+            color: this.stats?.indicator1 ? '#000000' : '#32a852',
+          })
+          .subscribe();
+        break;
+      case 2:
+        this.apiService
+          .apiIndicator2Post({
+            color: this.stats?.indicator2 ? '#000000' : '#32a852',
+          })
+          .subscribe();
+        break;
+      case 3:
+        this.apiService
+          .apiIndicator3Post({
+            color: this.stats?.indicator3 ? '#000000' : '#32a852',
+          })
+          .subscribe();
+        break;
+    }
   }
 }

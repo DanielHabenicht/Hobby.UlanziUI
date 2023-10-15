@@ -151,6 +151,78 @@ paths:
                 type: string
 
 
+  /api/indicator1:
+    post:
+      summary: Sets the Indicator in the upper right corner.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: string
+                  description: Hide indicator.
+                - type: object
+                  description: Display indicator.
+                  properties:
+                    color:
+                      $ref: '#/components/schemas/Color'
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /api/indicator2:
+    post:
+      summary: Sets the Indicator in the middle of the right side.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: string
+                  description: Hide indicator.
+                - type: object
+                  description: Display indicator.
+                  properties:
+                    color:
+                      $ref: '#/components/schemas/Color'
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /api/indicator3:
+    post:
+      summary: Sets the Indicator in the lower right corner.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: string
+                  description: Hide indicator.
+                - type: object
+                  description: Display indicator.
+                  properties:
+                    color:
+                      $ref: '#/components/schemas/Color'
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+
   /api/power:
     get:
         responses:
@@ -274,6 +346,8 @@ paths:
             text/plain:
               schema:
                 type: string
+
+
 
   /api/settings:
     post:

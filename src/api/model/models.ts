@@ -1,4 +1,6 @@
 export * from './apiCustomPostRequest';
+export * from './apiIndicator1PostRequest';
+export * from './apiIndicator1PostRequestOneOf';
 export * from './apiLoopGet200ResponseValue';
 export * from './apiMoodlightPostRequest';
 export * from './apiMoodlightPostRequestOneOf';

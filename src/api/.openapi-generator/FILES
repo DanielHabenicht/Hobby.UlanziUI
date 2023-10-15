@@ -8,6 +8,8 @@ encoder.ts
 git_push.sh
 index.ts
 model/apiCustomPostRequest.ts
+model/apiIndicator1PostRequest.ts
+model/apiIndicator1PostRequestOneOf.ts
 model/apiLoopGet200ResponseValue.ts
 model/apiMoodlightPostRequest.ts
 model/apiMoodlightPostRequestOneOf.ts

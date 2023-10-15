@@ -1,34 +1,93 @@
 <mat-toolbar color="primary">
-  <span>AWTRIX Client</span>
-  <span class="example-spacer"></span>
-  <button mat-icon-button (click)="prev()">
-    <mat-icon>skip_previous</mat-icon>
-  </button>
-  <button mat-icon-button (click)="next()">
-    <mat-icon>skip_next</mat-icon>
-  </button>
+  <mat-toolbar-row>
+    <button mat-icon-button (click)="refresh()">
+      <mat-icon>sync</mat-icon>
+    </button>
+    <span>AWTRIX Client ({{ this.stats.version }}) </span>
 
-  <button mat-icon-button (click)="on()">
-    <mat-icon>light_mode</mat-icon>
-  </button>
-  <button mat-icon-button (click)="off()">
-    <mat-icon>nightlight</mat-icon>
-  </button>
-  <button mat-icon-button (click)="reboot()">
-    <mat-icon>restart_alt</mat-icon>
-  </button>
-  <mat-icon> battery_full </mat-icon>
+    <span class="example-spacer"></span>
+    <button mat-button (click)="sleep()">sleep</button>
+
+    <button mat-button [matMenuTriggerFor]="menu">Notification</button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="displayIndicator(1)">
+        1 {{ this.stats.indicator1 ? "on" : "off" }}
+      </button>
+      <button mat-menu-item (click)="displayIndicator(2)">
+        2 {{ this.stats.indicator2 ? "on" : "off" }}
+      </button>
+      <button mat-menu-item (click)="displayIndicator(3)">
+        3 {{ this.stats.indicator3 ? "on" : "off" }}
+      </button>
+    </mat-menu>
+
+    <button mat-icon-button (click)="autoBrightness()">
+      <mat-icon>{{
+        this.settings.ABRI ? "brightness_auto" : "brightness_6"
+      }}</mat-icon>
+    </button>
+    <mat-slider
+      min="0"
+      max="255"
+      step="1"
+      [color]="'secondary'"
+      [discrete]="true"
+    >
+      <input
+        matSliderThumb
+        [(ngModel)]="this.settings.BRI"
+        (change)="brightness($event)"
+      />
+    </mat-slider>
+
+    <button mat-icon-button (click)="moodlight()">
+      <mat-icon> flashlight_on </mat-icon>
+    </button>
+
+    <button mat-icon-button (click)="moodlightOff()">
+      <mat-icon> flashlight_off </mat-icon>
+    </button>
+
+    <button mat-icon-button (click)="prev()">
+      <mat-icon>skip_previous</mat-icon>
+    </button>
+    <button mat-icon-button (click)="next()">
+      <mat-icon>skip_next</mat-icon>
+    </button>
+
+    <button mat-icon-button (click)="on()">
+      <mat-icon>light_mode</mat-icon>
+    </button>
+    <button mat-icon-button (click)="off()">
+      <mat-icon>nightlight</mat-icon>
+    </button>
+    <button mat-icon-button (click)="reboot()">
+      <mat-icon>restart_alt</mat-icon>
+    </button>
+  </mat-toolbar-row>
+
   <!-- <mat-icon> battery_5_bar </mat-icon>
-  <mat-icon> battery_4_bar </mat-icon>
-  <mat-icon> battery_3_bar </mat-icon>
-  <mat-icon> battery_2_bar </mat-icon>
-  <mat-icon> battery_1_bar </mat-icon>
-  <mat-icon> battery_charging_full </mat-icon> -->
+    <mat-icon> battery_4_bar </mat-icon>
+    <mat-icon> battery_3_bar </mat-icon>
+    <mat-icon> battery_2_bar </mat-icon>
+    <mat-icon> battery_1_bar </mat-icon>
+    <mat-icon> battery_charging_full </mat-icon> -->
+
+  <mat-toolbar-row>
+    <span
+      >{{ this.stats.bri }} Lux | {{ this.stats.temp }} °C |
+      {{ this.stats.hum }} %
+    </span>
+    <span class="example-spacer"></span>
+
+    <mat-icon matTooltip="{{ this.stats.bat }}%"> battery_full </mat-icon>
+  </mat-toolbar-row>
 </mat-toolbar>
 
 <mat-list>
-  <mat-list-item *ngFor="let app of apps"
-    >{{ app }}
+  <mat-list-item *ngFor="let app of apps">
+    {{ this.stats.app == app ? "👉" : "" }}
+    {{ app }}
     <button mat-icon-button (click)="display(app)">
       <mat-icon>play_circle</mat-icon>
     </button>
@@ -38,11 +97,6 @@
   >
 </mat-list>
 
-<pre>{{ $stats | async | json }}</pre>
+<pre>{{ stats | json }}</pre>
 
-<pre>{{ $power | async | json }}</pre>
-
-<button (click)="moodlight()">Moodlight</button>
-<button (click)="moodlightOff()">MoodlightOff</button>
-
-<button (click)="sleep()">sleep</button>
+<pre>{{ settings | json }}</pre>
