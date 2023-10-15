@@ -63,11 +63,6 @@ export class AppComponent {
     WD: true,
     WDCA: 16777215,
     WDCI: 6710886,
-    TIME_COL: 0,
-    DATE_COL: 0,
-    HUM_COL: 0,
-    TEMP_COL: 0,
-    BAT_COL: 0,
     SSPEED: 100,
     TIM: true,
     DAT: true,
@@ -162,13 +157,14 @@ export class AppComponent {
   public set() {
     this.apiService
       .apiSettingsPost({
-        DAT: true,
+        TIM: true,
+        DAT: false,
         BAT: false,
         HUM: false,
         TEMP: false,
       })
       .subscribe();
-    // this.apiService.apiRebootPost().subscribe();
+    this.apiService.apiRebootPost().subscribe();
   }
 
   public sleep() {
@@ -244,5 +240,18 @@ export class AppComponent {
           .subscribe();
         break;
     }
+  }
+  public saveSettings() {
+    this.apiService
+      .apiSettingsPost({
+        ...this.settings,
+      })
+      .subscribe();
+    this.updateSettings();
+  }
+
+  public resetSettings() {
+    this.apiService.apiResetSettingsPost().subscribe();
+    this.updateSettings();
   }
 }

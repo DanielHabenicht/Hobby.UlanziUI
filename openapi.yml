@@ -347,7 +347,16 @@ paths:
               schema:
                 type: string
 
-
+  /api/resetSettings:
+    description: Reset settings.
+    post:
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
 
   /api/settings:
     post:
@@ -599,11 +608,11 @@ paths:
                 - WD
                 - WDCA
                 - WDCI
-                - TIME_COL
-                - DATE_COL
-                - HUM_COL
-                - TEMP_COL
-                - BAT_COL
+                # - TIME_COL
+                # - DATE_COL
+                # - HUM_COL
+                # - TEMP_COL
+                # - BAT_COL
                 - SSPEED
                 - TIM
                 - DAT

@@ -88,6 +88,7 @@
 <mat-tab-group
   [selectedIndex]="this.tab === 'apps' ? 0 : 1"
   (selectedTabChange)="tabChange($event)"
+  [dynamicHeight]="true"
 >
   <mat-tab label="Apps">
     <mat-list>
@@ -115,11 +116,26 @@
         />
       </mat-form-field>
 
+      <mat-form-field class="example-full-width">
+        <mat-label>Time for Transition between Apps</mat-label>
+        <input
+          matInput
+          type="number"
+          placeholder="milliseconds"
+          [(ngModel)]="this.settings.TSPEED"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </mat-form-field>
+
       <!-- <mat-form-field class="example-full-width">
         <mat-label>Leave a comment</mat-label>
         <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
       </mat-form-field> -->
     </form>
+
+    <button mat-raised-button (click)="saveSettings()">Save</button>
+    <button mat-raised-button (click)="resetSettings()">Reset</button>
+    <button mat-raised-button (click)="set()">SetOnlyTimeApp</button>
   </mat-tab>
 </mat-tab-group>
 

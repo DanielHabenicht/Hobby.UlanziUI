@@ -95,11 +95,11 @@ export interface ApiSettingsGet200Response {
     WD: boolean;
     WDCA: number;
     WDCI: number;
-    TIME_COL: number;
-    DATE_COL: number;
-    HUM_COL: number;
-    TEMP_COL: number;
-    BAT_COL: number;
+    TIME_COL?: number;
+    DATE_COL?: number;
+    HUM_COL?: number;
+    TEMP_COL?: number;
+    BAT_COL?: number;
     /**
      * Scroll SPEED: Percentage modifier of the original scroll speed.
      */
