@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { skip } from 'rxjs';
 import {
   ApiSettingsGet200Response,
   ApiStatsGet200Response,
@@ -73,14 +76,43 @@ export class AppComponent {
     BAT: false,
   };
 
-  constructor(private apiService: DefaultService) {
+  public tab: 'apps' | 'settings' = 'apps';
+
+  constructor(
+    private apiService: DefaultService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
+  ) {
     this.updateSettings();
     this.updateStats();
     setInterval(() => {
       this.updateStats();
     }, 2000);
     this.updateApps();
+
+    this.activatedRoute.queryParamMap.pipe(skip(1)).subscribe((map) => {
+      const tab = map.get('tab');
+      if (tab) {
+        this.tab = tab as 'apps' | 'settings';
+      } else {
+        this.tab = 'apps';
+        this.router.navigate([], {
+          queryParams: {
+            tab: this.tab,
+          },
+        });
+      }
+    });
     // this.set();
+  }
+
+  public tabChange(event: MatTabChangeEvent) {
+    this.tab = event.tab.textLabel.toLowerCase() as 'apps' | 'settings';
+    this.router.navigate([], {
+      queryParams: {
+        tab: this.tab,
+      },
+    });
   }
 
   private updateSettings() {

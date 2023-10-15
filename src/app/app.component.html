@@ -84,19 +84,45 @@
   </mat-toolbar-row>
 </mat-toolbar>
 
-<mat-list>
-  <mat-list-item *ngFor="let app of apps">
-    {{ this.stats.app == app ? "👉" : "" }}
-    {{ app }}
-    <button mat-icon-button (click)="display(app)">
-      <mat-icon>play_circle</mat-icon>
-    </button>
-    <button mat-icon-button (click)="delete(app)">
-      <mat-icon>delete</mat-icon>
-    </button></mat-list-item
-  >
-</mat-list>
+{{ this.tab }}
+<mat-tab-group
+  [selectedIndex]="this.tab === 'apps' ? 0 : 1"
+  (selectedTabChange)="tabChange($event)"
+>
+  <mat-tab label="Apps">
+    <mat-list>
+      <mat-list-item *ngFor="let app of apps">
+        {{ this.stats.app == app ? "👉" : "" }}
+        {{ app }}
+        <button mat-icon-button (click)="display(app)">
+          <mat-icon>play_circle</mat-icon>
+        </button>
+        <button mat-icon-button (click)="delete(app)">
+          <mat-icon>delete</mat-icon>
+        </button></mat-list-item
+      >
+    </mat-list>
+  </mat-tab>
+  <mat-tab label="Settings">
+    <form class="example-form">
+      <mat-form-field class="example-full-width">
+        <mat-label>Display Time per App</mat-label>
+        <input
+          matInput
+          type="number"
+          placeholder="seconds"
+          [value]="this.settings.ATIME"
+        />
+      </mat-form-field>
 
-<pre>{{ stats | json }}</pre>
+      <!-- <mat-form-field class="example-full-width">
+        <mat-label>Leave a comment</mat-label>
+        <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+      </mat-form-field> -->
+    </form>
+  </mat-tab>
+</mat-tab-group>
+
+<!-- <pre>{{ stats | json }}</pre> -->
 
 <pre>{{ settings | json }}</pre>
