@@ -69,7 +69,7 @@ export interface ApiSettingsGet200Response {
      */
     DFORMAT: string;
     /**
-     * Start Of the week Monday: Whether the week should start with monday.
+     * Start Of the week Monday: Whether the week should start with monday (true) or sunday (false).
      */
     SOM: boolean;
     /**

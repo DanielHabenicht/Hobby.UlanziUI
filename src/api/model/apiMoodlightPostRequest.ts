@@ -11,7 +11,7 @@
  */
 import { ApiMoodlightPostRequestOneOf } from './apiMoodlightPostRequestOneOf';
 import { ApiMoodlightPostRequestOneOf1 } from './apiMoodlightPostRequestOneOf1';
-import { ApiMoodlightPostRequestOneOf1Color } from './apiMoodlightPostRequestOneOf1Color';
+import { Color } from './color';
 
 
 /**

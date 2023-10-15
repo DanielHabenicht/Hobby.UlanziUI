@@ -9,11 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Color } from './color';
+import { DisplayAction } from './displayAction';
 
 
-export interface ApiMoodlightPostRequestOneOf1 { 
-    brightness?: number;
-    color?: Color;
-}
+/**
+ * @type ApiCustomPostRequest
+ * @export
+ */
+export type ApiCustomPostRequest = string | { [key: string]: DisplayAction; };
 

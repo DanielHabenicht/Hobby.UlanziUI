@@ -8,13 +8,15 @@ import { DefaultService } from 'src/api';
 })
 export class AppComponent {
   public $stats;
-  public $loop;
+  public apps: string[] = [];
 
   public $power;
 
   constructor(private apiService: DefaultService) {
     this.$stats = this.apiService.apiStatsGet();
-    this.$loop = this.apiService.apiLoopGet();
+    this.apiService.apiLoopGet().subscribe((loop) => {
+      this.apps = Object.keys(loop);
+    });
     this.$power = this.apiService.apiSettingsGet();
     this.set();
   }
@@ -53,5 +55,25 @@ export class AppComponent {
 
   public sleep() {
     this.apiService.apiSleepPost({ sleep: 5 }).subscribe();
+  }
+
+  public delete(app: string) {
+    this.apiService.apiCustomPost(app, '').subscribe();
+  }
+
+  public display(app: string) {
+    this.apiService.apiSwitchPost({ name: app }).subscribe();
+  }
+
+  public next() {
+    this.apiService.apiNextappPost().subscribe();
+  }
+
+  public prev() {
+    this.apiService.apiPreviousappPost().subscribe();
+  }
+
+  public reboot() {
+    this.apiService.apiRebootPost().subscribe();
   }
 }

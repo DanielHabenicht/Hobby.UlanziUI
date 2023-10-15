@@ -141,11 +141,7 @@ paths:
                       type: number
                       minimum: 0
                     color:
-                      oneOf:
-                      - type: string
-                      - type: array
-                        items:
-                          type: integer
+                      $ref: '#/components/schemas/Color'
       responses:
         '200':
           description: OK
@@ -201,7 +197,7 @@ paths:
     post:
       parameters:
         - name: name
-          in: path
+          in: query
           required: true
           description: Name of the app to edit.
           schema:
@@ -211,14 +207,62 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                sleep:
-                  type: number
-                  description: Number of seconds to be in deeps sleep.
+              oneOf:
+                - type: string
+                  description: Empty String deletes the app.
+                - type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/DisplayAction'
+
       responses:
         '200':
           description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /api/nextapp:
+    description: Switch to the next app.
+    post:
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /api/previousapp:
+    description: Switch to the previous app.
+    post:
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /api/switch:
+    description: Switch to an app.
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
 
   /api/reboot:
     description: Allows to reboot it.
@@ -226,6 +270,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
 
   /api/settings:
     post:
@@ -338,6 +386,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
     get:
       responses:
         '200':
@@ -490,3 +542,51 @@ paths:
       responses:
         '200':
           description: OK
+
+components:
+  schemas:
+    DisplayAction:
+      type: object
+      properties:
+        text:
+          type: string
+          description: 'The text to display.'
+        textCase:
+          type: integer
+          enum:
+            - enum: [2]
+              description: display as is
+            - enum: [1]
+              description: uppercase text
+            - enum: [0]
+              description: user global default setting
+          default: 0
+        topText:
+          type: boolean
+          description: Draw the text on top.
+          default: false
+        textOffset:
+          type: integer
+          description: Sets an offset for the x position of a starting text.
+          default: 0
+        center:
+          type: boolean
+          description: Centers a short, non-scrollable text.
+          default: true
+        color:
+          $ref: '#/components/schemas/Color'
+        gradient:
+          type: array
+          items:
+            $ref: '#/components/schemas/Color'
+        blinkText:
+          type: integer
+
+
+    Color:
+      oneOf:
+      - type: string
+      - type: array
+        items:
+          type: integer
+

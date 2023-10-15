@@ -9,11 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Color } from './color';
 
 
-export interface ApiMoodlightPostRequestOneOf1 { 
-    brightness?: number;
-    color?: Color;
-}
+/**
+ * @type Color
+ * @export
+ */
+export type Color = Array<number> | string;
 
