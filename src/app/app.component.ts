@@ -167,6 +167,14 @@ export class AppComponent {
     this.apiService.apiRebootPost().subscribe();
   }
 
+  public try() {
+    this.apiService
+      .apiSettingsPost({
+        MATP: true,
+      })
+      .subscribe();
+  }
+
   public sleep() {
     this.apiService.apiSleepPost({ sleep: 5 }).subscribe();
   }
