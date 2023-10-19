@@ -626,6 +626,97 @@ paths:
         '200':
           description: OK
 
+  /edit:
+    post:
+      description: Upload file content, e.g. gif or jpg
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+            encoding:
+              image:
+                contentType: image/gif, image/jpg
+
+
+      responses:
+        '200':
+          description: OK
+
+  /list:
+    get:
+      description: Get Files in a Folder on the ESP.
+      parameters:
+        - name: dir
+          in: query
+          required: true
+          description: Path for where to "execute" ls.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Object with all Files
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: Name of the object.
+                    size:
+                      type: string
+                      description: size of the object.
+                    type:
+                      type: string
+                      enum:
+                        - file
+                        - dir
+
+
+  /{folder}/{file}:
+    get:
+      description: Get Files in a Folder on the ESP.
+      parameters:
+        - name: folder
+          in: path
+          required: true
+          description: Folder
+          schema:
+            type: string
+            enum:
+              - ICONS
+              - CUSTOMAPPS
+              - MELODIES
+              - PALETTES
+        - name: file
+          in: path
+          required: true
+          description: Filename
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Object with all Files
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+            image/gif:
+              schema:
+                type: string
+                format: binary
+
+
+
 components:
   schemas:
     DisplayAction:
@@ -672,4 +763,5 @@ components:
       - type: array
         items:
           type: integer
+
 
