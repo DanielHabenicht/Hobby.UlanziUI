@@ -76,7 +76,7 @@ export class AppComponent {
   constructor(
     private apiService: DefaultService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
   ) {
     this.updateSettings();
     this.updateStats();
@@ -170,7 +170,7 @@ export class AppComponent {
   public try() {
     this.apiService
       .apiSettingsPost({
-        MATP: true,
+        BLOCKN: true,
       })
       .subscribe();
   }
